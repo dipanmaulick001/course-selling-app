@@ -1,21 +1,13 @@
 const express = require("express");
 const app = express();
 const jwt = require("jsonwebtoken");
+const {userRouter} = require("./routes/user");
+const {courseRouter} = require("./routes/course");
 
 app.use(express.json());
 
-app.post("/user-signup" , function(req ,res){
-
-})
-
-app.post("/user-login" , function(req ,res){
-
-})
-
-app.post("/buy-a-course" , function(req ,res){
-
-})
+app.use("/user" , userRouter);
+app.use("/course" , courseRouter);
 
 
-
-app.prependOnceListener(3006);
+app.listen(3006);
