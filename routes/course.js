@@ -1,5 +1,6 @@
 const express = require("express");
 const Router = express.Router;
+const {CourseModel} = require("../db");
 
 const courseRouter = Router();
 

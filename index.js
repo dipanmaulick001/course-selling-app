@@ -1,4 +1,10 @@
+require("dotenv").config();
+
+
 const express = require("express");
+const mongoose = require("mongoose");
+
+
 const app = express();
 const jwt = require("jsonwebtoken");
 const {userRouter} = require("./routes/user");
@@ -12,4 +18,12 @@ app.use("/admin",adminRouter);
 app.use("/course" , courseRouter);
 
 
-app.listen(3006);
+async function main(){
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log("Connected to db");
+    app.listen(process.env.PORT, ()=>{
+        console.log(`listening on port ${process.env.PORT}`);
+    });
+    //the backend should run only when we are connected to the db, so await
+}
+main();
