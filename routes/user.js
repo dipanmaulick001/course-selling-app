@@ -4,6 +4,7 @@ const {Router} = require("express");
 const {UserModel} = require("../db");
 const bcrypt = require("bcrypt");
 const {z} = require("zod"); //for input validation
+const jwt = require("jsonwebtoken");
 
 const userRouter = Router();
 
@@ -82,9 +83,7 @@ userRouter.post("/login" , async function(req ,res){
             message : "Incorrect credentials"
         })
     }
-
-    
-        
+       
 })
 
 userRouter.get("/purchases", function(req ,res){

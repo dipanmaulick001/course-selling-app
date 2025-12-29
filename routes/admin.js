@@ -2,12 +2,32 @@ const express = require("express");
 const {Router} = require("express");
 const {AdminModel} = require("../db");
 const bcrypt = require("bcrypt");
+const {z} = require("zod");
+const jwt = require("jsonwebtoken");
 
 const adminRouter = Router();
 
 adminRouter.post("/signup" , async function(req ,res){
-        const email = req.body.email;
-        const password = req.body.password;
+    //input validation
+
+        const requiredAdminBody = z.object({
+            email : z.email(),
+            password : z.string().min(5).max(30),
+            firstName : z.string().min(2).max(50),
+            lastName  : z.string().min(2).max(50)
+        })
+
+        const parsedAdminDataWithSucc = requiredAdminBody.safeParse(req.body);
+
+        if(!parsedAdminDataWithSucc.success){
+                res.json({
+                    message : "invalid format"
+                })
+        }
+
+        //if correct format
+
+        const {email , password ,firstName , lastName} = req.body;
 
         let errorThrown = false;
         try{
@@ -15,7 +35,9 @@ adminRouter.post("/signup" , async function(req ,res){
 
             await AdminModel.create({
                 email : email,
-                password : hashedPassword
+                password : hashedPassword,
+                firstName : firstName,
+                lastName : lastName
             })
         }catch(e){
             res.json({
@@ -32,25 +54,24 @@ adminRouter.post("/signup" , async function(req ,res){
 })
 
 adminRouter.post("/login" , async function(req ,res){
-    const email = req.body.email;
-    const password = req.body.password;
+    const {email , password} = req.body;
 
-    const user = await AdminModel.findOne({
+    const admin = await AdminModel.findOne({
         email : email
     })
 
-    if(!user){
+    if(!admin){
         res.json({
             message : "no such admin exists"
         })
     }
 
-    const passwordMatch = bcrypt.compare(password , user.password);
+    const passwordMatch = bcrypt.compare(password , admin.password);
 
     if(passwordMatch){
         const token = jwt.sign({
             id : user._id.toString()
-        },process.env.JWT_SECRET)
+        },process.env.JWT_ADMIN_SECRET)
         res.json({
             token : token
         })
