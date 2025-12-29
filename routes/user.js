@@ -15,9 +15,16 @@ userRouter.post("/signup" , async function(req ,res){
         lastName : z.string().min(2).max(50)
     })
 
+    const parsedDataWithSuccess = requiredBody.safeParse(req.body);
 
+    if(!parsedDataWithSuccess.success){
+            res.json({
+                message : "incorrect format",
+                error : parsedDataWithSuccess.error
+            })
+    }
+    //if correct format
 
-    
     const {email , password , firstName , lastName} = req.body;
 
     let errorThrown = false;
@@ -48,8 +55,7 @@ userRouter.post("/signup" , async function(req ,res){
 })
 
 userRouter.post("/login" , async function(req ,res){
-    const email = req.body.email;
-    const password = req.body.password;
+    const {email , password} = req.body
 
     let response = await UserModel.findOne({
         email : email
@@ -66,7 +72,7 @@ userRouter.post("/login" , async function(req ,res){
     if(passwordMatch){
         const token = jwt.sign({
                 id : response._id.toString()
-        },process.env.JWT_SECRET);
+        },process.env.JWT_USER_SECRET);
 
         return res.json({
             token : token
