@@ -11,7 +11,7 @@ const {userRouter} = require("./routes/user");
 const {courseRouter} = require("./routes/course");
 const {adminRouter} = require("./routes/admin");
 
-app.use(express.json());
+app.use(express.json()); //to parse json data in the body
 
 app.use("/user" , userRouter);
 app.use("/admin",adminRouter);
