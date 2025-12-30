@@ -105,15 +105,33 @@ adminRouter.post("/course" , adminMiddleware, async function(req ,res){
     })
 })
 
-adminRouter.put("/course" , function(req ,res){
+adminRouter.put("/course" , async function(req ,res){
+    const adminId = req.adminId;
+    const {title , description , price , imageURL , courseId} = require("../db");
+
+    await CourseModel.updateOne({
+        _id : courseId,
+        creatorId : adminId    //adminId so that no other admin can update course of other admin
+    },{
+        title : title,
+        description : description,
+        price : price,
+        imageURL : imageURL,
+    })
+
     res.json({
-        message : "admin has modified the course"
+        message : "course updated"
     })
 })
 
-adminRouter.get("/course", function(req ,res){
+adminRouter.get("/course", async function(req ,res){
+    const adminId = req.adminId;
+    const courses = await CourseModel.find({
+        creatorId : adminId
+    })
+
     res.json({
-        message : "these are the courses"
+        courses
     })
 })
 
