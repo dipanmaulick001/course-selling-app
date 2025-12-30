@@ -33,7 +33,7 @@ userRouter.post("/signup" , async function(req ,res){
 
     let errorThrown = false;
     try{
-        const hashedPassword = bcrypt.hash(password, 5);
+        const hashedPassword = await bcrypt.hash(password, 5);
 
         await UserModel.create({
             email : email,
