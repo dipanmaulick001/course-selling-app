@@ -6,6 +6,8 @@ const bcrypt = require("bcrypt");
 const {z} = require("zod"); //for input validation
 const jwt = require("jsonwebtoken");
 
+const {userMiddleware} = require("../middlewares/user");
+
 const userRouter = Router();
 
 userRouter.post("/signup" , async function(req ,res){
@@ -86,7 +88,7 @@ userRouter.post("/login" , async function(req ,res){
        
 })
 
-userRouter.get("/purchases", function(req ,res){
+userRouter.get("/purchases",usermidd function(req,res){
     res.json({
         message : "these are your courses"
     })
