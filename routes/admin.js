@@ -124,14 +124,14 @@ adminRouter.put("/course" , async function(req ,res){
     })
 })
 
-adminRouter.get("/course", async function(req ,res){
+adminRouter.get("/course/bulk", async function(req ,res){
     const adminId = req.adminId;
     const courses = await CourseModel.find({
         creatorId : adminId
     })
 
     res.json({
-        courses
+        courses : courses
     })
 })
 

@@ -28,6 +28,8 @@ const PurchaseSchema = new Schema({
     userId : ObjectId
 })
 
+//we should have another schema and model for course contents
+
 //we can add references in mongo schema later on
 
 const UserModel = mongoose.model("users" , UserSchema);

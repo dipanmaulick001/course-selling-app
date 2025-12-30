@@ -1,12 +1,13 @@
 const express = require("express");
 //const Router = express.Router;
 const {Router} = require("express");
-const {UserModel} = require("../db");
+const {UserModel, PurchaseModel} = require("../db");
 const bcrypt = require("bcrypt");
 const {z} = require("zod"); //for input validation
 const jwt = require("jsonwebtoken");
 
 const {userMiddleware} = require("../middlewares/user");
+const user = require("../middlewares/user");
 
 const userRouter = Router();
 
@@ -88,9 +89,15 @@ userRouter.post("/login" , async function(req ,res){
        
 })
 
-userRouter.get("/purchases",usermidd function(req,res){
+userRouter.get("/purchases",userMiddleware, async function(req,res){
+    //user sees all his/her purchases
+    const userId = req.userId;
+    const purchases  = await PurchaseModel.find({
+        userId : userId
+    })
+
     res.json({
-        message : "these are your courses"
+        purchases : purchases
     })
 })
 
