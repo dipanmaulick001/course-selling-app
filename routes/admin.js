@@ -72,7 +72,7 @@ adminRouter.post("/login" , async function(req ,res){
 
     if(passwordMatch){
         const token = jwt.sign({
-            id : user._id.toString()
+            id : admin._id.toString()
         },process.env.JWT_ADMIN_SECRET)
         res.json({
             token : token
