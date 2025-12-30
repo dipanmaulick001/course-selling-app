@@ -6,7 +6,7 @@ function adminMiddleware(req ,res , next){
     const decodedInfo = jwt.verify(token , process.env.JWT_ADMIN_SECRET);
 
     if(decodedInfo){
-        req.userId = decodedInfo.id;
+        req.adminId = decodedInfo.id;  //sent to the routes
         next()
     }else{
         res.status(403).json({
