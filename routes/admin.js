@@ -10,49 +10,50 @@ const {adminMiddleware} = require("../middlewares/admin");
 const adminRouter = Router();
 
 adminRouter.post("/signup" , async function(req ,res){
-    //input validation
+    const requiredBody = z.object({
+        email : z.email(),
+        password : z.string().min(5).max(20),
+        firstName : z.string().min(2).max(50),
+        lastName : z.string().min(2).max(50)
+    })
 
-        const requiredAdminBody = z.object({
-            email : z.email(),
-            password : z.string().min(5).max(30),
-            firstName : z.string().min(2).max(50),
-            lastName  : z.string().min(2).max(50)
+    const parsedDataWithSuccess = requiredBody.safeParse(req.body);
+
+    if(!parsedDataWithSuccess.success){
+            res.json({
+                message : "incorrect format",
+                error : parsedDataWithSuccess.error
+            })
+    }
+    //if correct format
+
+    const {email , password , firstName , lastName} = req.body;
+
+    let errorThrown = false;
+    try{
+        const hashedPassword = await bcrypt.hash(password, 5);
+
+        await AdminModel.create({
+            email : email,
+            password : hashedPassword,
+            firstName : firstName,
+            lastName : lastName
         })
 
-        const parsedAdminDataWithSucc = requiredAdminBody.safeParse(req.body);
+    }catch(e){
+        res.json({
+            message : "error"
+        })
+        errorThrown = true;
 
-        if(!parsedAdminDataWithSucc.success){
-                res.json({
-                    message : "invalid format"
-                })
-        }
+    }
 
-        //if correct format
-
-        const {email , password ,firstName , lastName} = req.body;
-
-        let errorThrown = false;
-        try{
-            const hashedPassword = await bcrypt.hash(password, 5);
-
-            await AdminModel.create({
-                email : email,
-                password : hashedPassword,
-                firstName : firstName,
-                lastName : lastName
-            })
-        }catch(e){
-            res.json({
-                message : "error"
-            })
-            errorThrown = true;
-        }
-
-        if(!errorThrown){
-            res.json({
-                message : "admin account created successfully"
-            })
-        }
+    if(!errorThrown){
+        res.json({
+            message : "admin account created"
+        })
+    }
+        
 })
 
 adminRouter.post("/login" , async function(req ,res){
