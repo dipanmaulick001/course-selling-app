@@ -32,41 +32,47 @@ Built with **Node.js, Express, MongoDB**, following clean and scalable backend p
 
 ## 📁 Project Structure
 
-backend/
+course-selling-app/
+├── middlewares/
+│ ├── admin.js # Admin authentication middleware
+│ └── user.js # User authentication middleware
+│
 ├── routes/
-│ ├── admin.js
-│ ├── user.js
-│ └── course.js
-├── models/
-│ ├── Admin.js
-│ ├── User.js
-│ └── Course.js
-├── middleware/
-│ └── auth.js
-├── db.js
-├── index.js
+│ ├── admin.js # Admin routes (signup, login, course creation)
+│ ├── user.js # User routes (signup, login, purchases)
+│ └── course.js # Course-related routes
+│
+├── node_modules/
+│
+├── .env # Environment variables
+├── .env.example # Sample environment variables
+├── .gitignore
+├── db.js # Database connection
+├── index.js # App entry point
+├── package.json
+├── package-lock.json
 └── README.md
-
 
 ---
 
-## 🔐 Authentication Flow
+
+## 🔐 Authentication & Authorization
 
 - Passwords are hashed using **bcrypt**
 - JWT tokens are issued on successful login
-- Protected routes use authentication middleware
-- Role-based access control for admins and users
+- Middleware protects admin and user routes
+- Role-based access control enforced via middleware
 
 ---
 
 ## 🧪 API Endpoints (Sample)
 
-### Admin Routes
+### Admin
 - `POST /admin/signup`
 - `POST /admin/login`
 - `POST /admin/course`
 
-### User Routes
+### User
 - `POST /user/signup`
 - `POST /user/login`
 - `GET /courses`
@@ -78,6 +84,6 @@ backend/
 
 ```bash
 git clone <repo-url>
-cd backend
+cd course-selling-app
 npm install
 npm start
