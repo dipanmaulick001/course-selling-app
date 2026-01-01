@@ -94,7 +94,7 @@ userRouter.get("/purchases",userMiddleware, async function(req,res){
     const userId = req.userId;
     const purchases  = await PurchaseModel.find({
         userId : userId
-    })
+    }) //gives all the courses purchased by the user( user id given)
 
     res.json({
         purchases : purchases

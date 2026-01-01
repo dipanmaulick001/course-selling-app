@@ -91,7 +91,7 @@ adminRouter.post("/course" , adminMiddleware, async function(req ,res){
     const adminId = req.adminId;
     const {title , description, price , imageURL} = require("../db");
 
-    //admin creates a course
+    //admin creates a course, adds course to course model
     const course = await CourseModel.create({
         title : title,
         description : description,

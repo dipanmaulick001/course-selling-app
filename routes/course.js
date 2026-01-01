@@ -23,6 +23,7 @@ courseRouter.post("/purchase" , userMiddleware ,async function(req ,res){
 courseRouter.get("/preview" , async function(req , res){
     //user can see all the available courses
     //we dont need authentication to see all the courses avaialble
+    //logged in our logged out doesn't matter
     const courses = await CourseModel.find({});
     res.json({
         courses : courses,
